@@ -1,7 +1,6 @@
 using Application.Commands.Products;
 using Application.Mappings;
 using Asp.Versioning;
-using Domain.Entities.Products;
 using Domain.Interfaces.Products;
 using Infrastructure.Contexts;
 using Infrastructure.Repositories.Products;
@@ -9,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using StackExchange.Redis;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -108,7 +108,7 @@ builder.Services.AddSwaggerGen(options =>
 
 // Database Connection
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection"))
 );
 
 // AutoMapper
@@ -119,6 +119,13 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 // Register CQRS
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(CreateProductCommandHandler).Assembly));
+
+// Redis Cache
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("RedisConnection");
+    options.InstanceName = "SampleInstance";
+});
 
 builder.Services.AddControllers();
 

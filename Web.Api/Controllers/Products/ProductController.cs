@@ -4,6 +4,8 @@ using Application.Queries.Products;
 using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
 
 namespace Web.Api.Controllers.Products
 {
@@ -11,7 +13,7 @@ namespace Web.Api.Controllers.Products
     [ApiVersion("2.0")]
     [Route("api/v{version:apiVersion}/product")]
     [ApiController]
-    public class ProductController(IMediator mediator) : ControllerBase
+    public class ProductController(IMediator mediator, IDistributedCache cache, ILogger<ProductController> logger) : ControllerBase
     {
         [MapToApiVersion("1.0")]
         [HttpGet("get-all-products")]
@@ -30,11 +32,31 @@ namespace Web.Api.Controllers.Products
 
         [MapToApiVersion("2.0")]
         [HttpGet("{id}")]        
-        public async Task<ActionResult<ProductDto>> GetProductByIdAsync(int id)
+        public async Task<ActionResult<ProductDto>> GetProductAsync(int id)
         {
             try
             {
+                var cachedProductJson = await cache.GetStringAsync($"product:{id}");
+                if(cachedProductJson is not null)
+                {
+                    logger.LogInformation($"Product {id} retrieved from cache.");
+                    var cachedProduct = JsonSerializer.Deserialize<ProductDto>(cachedProductJson);
+                    return Ok(cachedProduct);
+                }
+
                 var products = await mediator.Send(new GetProductByIdQuery { Id = id });
+                if (products is null)
+                    return NotFound();
+
+                var productJson = JsonSerializer.Serialize(products);
+                var cacheOptions = new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10), // Cache for 10 minutes
+                    SlidingExpiration = TimeSpan.FromMinutes(5) // Cache expire if no activity for 5 minutes
+                };
+
+                await cache.SetStringAsync($"product:{id}", productJson, cacheOptions);
+                logger.LogInformation($"Product {id} retrieved from database and stored in cache.");
                 return Ok(products);
             }
             catch (Exception ex)
