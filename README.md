@@ -1,7 +1,8 @@
+## Clean Architecture
 📌 Clean Architecture with ASP.NET Core 8, MediatR, CQRS, and EF Core
 🚀 A well-structured ASP.NET Core 8 project following Clean Architecture, implementing CQRS with MediatR, Entity Framework Core, Repository Pattern, and MS SQL Server.
 
-🛠️ Technologies Used
+## 🛠️ Technologies Used
 ✅ ASP.NET Core 8 - Web API framework
 ✅ C# - Primary programming language
 ✅ MediatR - Implements the Mediator Pattern for CQRS
@@ -14,7 +15,7 @@
 ✅ Serilog - Logging
 ✅ Dependency Injection - Follows SOLID principles
 
-📂 Project Structure
+## 📂 Project Structure
 CleanArchitectureSolution/
 │── src/
 │   ├── CleanArchitecture.Domain/      → Core business logic & entities
@@ -26,7 +27,7 @@ CleanArchitectureSolution/
 │── README.md
 │── CleanArchitecture.sln
 
-📌 Features
+## 📌 Features
 ✅ Clean Architecture Best Practices
 ✅ CQRS with MediatR (Commands & Queries Separation)
 ✅ Centralized Exception Handling
@@ -37,28 +38,28 @@ CleanArchitectureSolution/
 ✅ Repository & Unit of Work Pattern
 ✅ Dependency Injection (DI)
 
-⚙️ Getting Started
+## ⚙️ Getting Started
 🔹 Prerequisites
 Install .NET 8 SDK
 Install SQL Server
 Install Visual Studio 2022 or VS Code
 Install Postman (for API testing)
 
-🚀 Future Enhancements
+## 🚀 Future Enhancements
 ✅ Add JWT Authentication
 ✅ Implement Event-Driven Architecture
 ✅ Integrate Docker for containerized deployment
 
-📌 Contributing
+## 📌 Contributing
 Fork the repository 🍴
 Create a new branch (git checkout -b feature-branch)
 Commit changes (git commit -m 'Add new feature')
 Push to branch (git push origin feature-branch)
 Open a Pull Request 🚀
 
-📄 License
+## 📄 License
 This project is licensed under the MIT License.
 
-📌 Contact
+## 📌 Contact
 📧 Email: md.parvezcse@gmail.com
 🐙 GitHub: https://github.com/Parbaz-Hossain
