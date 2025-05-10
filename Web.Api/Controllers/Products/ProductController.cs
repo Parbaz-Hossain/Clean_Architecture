@@ -32,7 +32,7 @@ namespace Web.Api.Controllers.Products
 
         [MapToApiVersion("2.0")]
         [HttpGet("{id}")]        
-        public async Task<ActionResult<ProductDto>> GetProductAsync(int id)
+        public async Task<ActionResult<ProductDto>> GetProductByIdAsync(int id)
         {
             try
             {
